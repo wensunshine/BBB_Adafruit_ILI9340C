@@ -70,7 +70,7 @@ void Adafruit_ILI9340::spiwrite(uint8_t c) {
     while(!(SPSR & _BV(SPIF)));
 #endif
 #if defined(USE_SPI_LIBRARY)
-    SPI.transfer(c);
+    spiTransferByte(c);
 #endif
   } else {
     // Fast SPI bitbang swiped from LPD8806 library
@@ -154,7 +154,10 @@ void Adafruit_ILI9340::commandList(uint8_t *addr) {
 
 
 void Adafruit_ILI9340::begin(void) {
-  pinMode(_rst, OUTPUT);
+int fd = initSpi();
+spiTransferByte(fd,0x10);
+closeSpi();
+/*  pinMode(_rst, OUTPUT);
   digitalWrite(_rst, LOW);
   pinMode(_dc, OUTPUT);
   pinMode(_cs, OUTPUT);
@@ -227,7 +230,7 @@ void Adafruit_ILI9340::begin(void) {
   */
 
   //if(cmdList) commandList(cmdList);
-  
+  /*
   writecommand(0xEF);
   writedata(0x03);
   writedata(0x80);
@@ -333,7 +336,7 @@ void Adafruit_ILI9340::begin(void) {
 
   writecommand(ILI9340_SLPOUT);    //Exit Sleep 
   delay(120); 		
-  writecommand(ILI9340_DISPON);    //Display on 
+  writecommand(ILI9340_DISPON);    //Display on */ 
 }
 
 

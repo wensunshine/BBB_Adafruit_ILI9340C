@@ -16,14 +16,15 @@
 
 #ifndef _ADAFRUIT_ILI9340H_
 #define _ADAFRUIT_ILI9340H_
-
+/*
 #if ARDUINO >= 100
  #include "Arduino.h"
  #include "Print.h"
 #else
  #include "WProgram.h"
-#endif
+#endif*/
 #include <Adafruit_GFX.h>
+#include <stdint.h>
 
 #if defined(__SAM3X8E__)
 #include <include/pio.h>

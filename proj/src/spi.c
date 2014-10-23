@@ -35,7 +35,8 @@ static uint8_t bits = 8;
 static uint32_t speed = 500000;
 static uint16_t delay;
 
-static void spiTransferByte(int fd,uint8_t data)
+int fd;
+void spiTransferByte(int fd,uint8_t data)
 {
 	int ret;
 	uint8_t rx;
@@ -176,12 +177,12 @@ static void parse_opts(int argc, char *argv[])
 	}
 }
 
-int main(int argc, char *argv[])
+//int main(int argc, char *argv[])
+int initSpi()
 {
 	int ret = 0;
-	int fd;
 
-	parse_opts(argc, argv);
+//	parse_opts(argc, argv);
 
 	fd = open(device, O_RDWR);
 	if (fd < 0)
@@ -226,10 +227,15 @@ int main(int argc, char *argv[])
 
 	//transfer(fd);
 	
-	spiTransferByte(fd,0xAA);
-	close(fd);
+	//spiTransferByte(fd,0xAA);
+	//close(fd);
 
-	return ret;
+	return fd;
 }
 
+int closeSpi(int fd)
+{
+close(fd);
+return 0;
+}
 
