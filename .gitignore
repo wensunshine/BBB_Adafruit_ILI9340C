@@ -1,2 +1,2 @@
-src/*.o
-src/spi
+proj/src/obj/*.o
+proj/src/spi

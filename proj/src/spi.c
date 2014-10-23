@@ -41,12 +41,12 @@ static void spiTransferByte(int fd,uint8_t data)
 	uint8_t rx;
 	
 	struct spi_ioc_transfer tr = {
-		.tx_buf = (unsigned long)&data,
-		.rx_buf = (unsigned long)&rx,
-		.len = sizeof(data),
-		.delay_usecs = delay,
-		.speed_hz = speed,
-		.bits_per_word = bits,
+		(unsigned long)&data,
+		(unsigned long)&rx,
+		sizeof(data),
+		delay,
+		speed,
+		bits,
 	};
 	ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
 	if (ret < 1)
@@ -71,12 +71,12 @@ static void transfer(int fd)
 	};
 	uint8_t rx[ARRAY_SIZE(tx)] = {0, };
 	struct spi_ioc_transfer tr = {
-		.tx_buf = (unsigned long)tx,
-		.rx_buf = (unsigned long)rx,
-		.len = ARRAY_SIZE(tx),
-		.delay_usecs = delay,
-		.speed_hz = speed,
-		.bits_per_word = bits,
+		(unsigned long)tx,
+		(unsigned long)rx,
+		ARRAY_SIZE(tx),
+		delay,
+		speed,
+		bits,
 	};
 
 	ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);

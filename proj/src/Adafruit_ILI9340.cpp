@@ -19,7 +19,7 @@
 #include <limits.h>
 #include "pins_arduino.h"
 #include "wiring_private.h"
-#include <SPI.h>
+#include "SPI.h"
 
 #if defined(__SAM3X8E__)
 #include <include/pio.h>
