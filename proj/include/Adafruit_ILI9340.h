@@ -152,13 +152,13 @@ void     begin(void),
  // uint32_t readcommand32(uint8_t);
   //void     dummyclock(void);
   */  
-/*
+
   void     spiwrite(uint8_t),
     writecommand(uint8_t c),
     writedata(uint8_t d),
     commandList(uint8_t *addr);
   uint8_t  spiread(void);
-*/
+
  private:
   uint8_t  tabcolor;
 

@@ -21,7 +21,7 @@
 //#include "pins_arduino.h"
 //#include "wiring_private.h"
 #include "spi.h"
-
+#include <unistd.h>
 #if defined(__SAM3X8E__)
 #include <include/pio.h>
   #define SET_BIT(port, bitMask) (port)->PIO_SODR |= (bitMask)
@@ -37,7 +37,7 @@
   #define SET_BIT(port, bitMask) digitalWrite(*(port), HIGH);
   #define CLEAR_BIT(port, bitMask) digitalWrite(*(port), LOW);
 #endif
-
+extern int fd;
 // Constructor when using software SPI.  All output pins are configurable.
 /*Adafruit_ILI9340::Adafruit_ILI9340(uint8_t cs, uint8_t dc, uint8_t mosi,
 				   uint8_t sclk, uint8_t rst, uint8_t miso) : Adafruit_GFX(ILI9340_TFTWIDTH, ILI9340_TFTHEIGHT) {
@@ -92,34 +92,40 @@ void Adafruit_ILI9340::spiwrite(uint8_t c) {
 }
 
 
+*/
 void Adafruit_ILI9340::writecommand(uint8_t c) {
-  CLEAR_BIT(dcport, dcpinmask);
+  //CLEAR_BIT(dcport, dcpinmask);
   //digitalWrite(_dc, LOW);
-  CLEAR_BIT(clkport, clkpinmask);
+  //CLEAR_BIT(clkport, clkpinmask);
   //digitalWrite(_sclk, LOW);
-  CLEAR_BIT(csport, cspinmask);
+  //CLEAR_BIT(csport, cspinmask);
   //digitalWrite(_cs, LOW);
 
-  spiwrite(c);
+   spiTransferByte(fd,c);
 
-  SET_BIT(csport, cspinmask);
+//closeSpi(fd);
+//  spiwrite(c);
+
+  //SET_BIT(csport, cspinmask);
   //digitalWrite(_cs, HIGH);
 }
 
 
 void Adafruit_ILI9340::writedata(uint8_t c) {
-  SET_BIT(dcport,  dcpinmask);
+  //SET_BIT(dcport,  dcpinmask);
   //digitalWrite(_dc, HIGH);
-  CLEAR_BIT(clkport, clkpinmask);
+  //CLEAR_BIT(clkport, clkpinmask);
   //digitalWrite(_sclk, LOW);
-  CLEAR_BIT(csport, cspinmask);
+  //CLEAR_BIT(csport, cspinmask);
   //digitalWrite(_cs, LOW);
   
-  spiwrite(c);
+   spiTransferByte(fd,c);
+  //spiwrite(c);
 
   //digitalWrite(_cs, HIGH);
-  SET_BIT(csport, cspinmask);
-} */
+  //SET_BIT(csport, cspinmask);
+} 
+/*
 
 // Rather than a bazillion writecommand() and writedata() calls, screen
 // initialization commands and arguments are organized in these tables
@@ -156,9 +162,7 @@ void Adafruit_ILI9340::commandList(uint8_t *addr) {
 */
 
 void Adafruit_ILI9340::begin(void) {
-int fd = initSpi();
-spiTransferByte(fd,0x10);
-closeSpi(fd);
+fd = initSpi();
 /*  pinMode(_rst, OUTPUT);
   digitalWrite(_rst, LOW);
   pinMode(_dc, OUTPUT);
@@ -232,7 +236,7 @@ closeSpi(fd);
   */
 
   //if(cmdList) commandList(cmdList);
-  /*
+  
   writecommand(0xEF);
   writedata(0x03);
   writedata(0x80);
@@ -337,8 +341,9 @@ closeSpi(fd);
   writedata(0x0F); 
 
   writecommand(ILI9340_SLPOUT);    //Exit Sleep 
-  delay(120); 		
-  writecommand(ILI9340_DISPON);    //Display on */ 
+  //delay(120); 		
+  usleep(120000);
+  writecommand(ILI9340_DISPON);    //Display on 
 }
 
 /*
