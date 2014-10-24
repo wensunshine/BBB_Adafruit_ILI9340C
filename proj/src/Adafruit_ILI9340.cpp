@@ -60,7 +60,7 @@ Adafruit_ILI9340::Adafruit_ILI9340(uint8_t cs, uint8_t dc, uint8_t rst): Adafrui
   hwSPI = true;
   _mosi  = _sclk = 0;   
 }
-/*
+
 void Adafruit_ILI9340::spiwrite(uint8_t c) {
 
   //Serial.print("0x"); Serial.print(c, HEX); Serial.print(", ");
@@ -71,11 +71,11 @@ void Adafruit_ILI9340::spiwrite(uint8_t c) {
     while(!(SPSR & _BV(SPIF)));
 #endif
 #if defined(USE_SPI_LIBRARY)
-    spiTransferByte(c);
+    spiTransferByte(fd,c);
 #endif
   } else {
     // Fast SPI bitbang swiped from LPD8806 library
-    for(uint8_t bit = 0x80; bit; bit >>= 1) {
+    /*for(uint8_t bit = 0x80; bit; bit >>= 1) {
       if(c & bit) {
         //digitalWrite(_mosi, HIGH); 
         SET_BIT(mosiport, mosipinmask);
@@ -87,12 +87,12 @@ void Adafruit_ILI9340::spiwrite(uint8_t c) {
       SET_BIT(clkport, clkpinmask);
       //digitalWrite(_sclk, LOW);
       CLEAR_BIT(clkport, clkpinmask);
-    }
+    }*/
   }
 }
 
 
-*/
+
 void Adafruit_ILI9340::writecommand(uint8_t c) {
   //CLEAR_BIT(dcport, dcpinmask);
   //digitalWrite(_dc, LOW);
@@ -346,7 +346,7 @@ fd = initSpi();
   writecommand(ILI9340_DISPON);    //Display on 
 }
 
-/*
+
 void Adafruit_ILI9340::setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1,
  uint16_t y1) {
 
@@ -365,7 +365,7 @@ void Adafruit_ILI9340::setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1,
   writecommand(ILI9340_RAMWR); // write to RAM
 }
 
-
+/*
 void Adafruit_ILI9340::pushColor(uint16_t color) {
   //digitalWrite(_dc, HIGH);
   SET_BIT(dcport, dcpinmask);
@@ -445,7 +445,7 @@ void Adafruit_ILI9340::drawFastHLine(int16_t x, int16_t y, int16_t w,
   SET_BIT(csport, cspinmask);
   //digitalWrite(_cs, HIGH);
 }
-
+*/
 void Adafruit_ILI9340::fillScreen(uint16_t color) {
   fillRect(0, 0,  _width, _height, color);
 }
@@ -463,21 +463,23 @@ void Adafruit_ILI9340::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
 
   uint8_t hi = color >> 8, lo = color;
 
-  SET_BIT(dcport, dcpinmask);
+  /*SET_BIT(dcport, dcpinmask);
   //digitalWrite(_dc, HIGH);
-  CLEAR_BIT(csport, cspinmask);
+  CLEAR_BIT(csport, cspinmask);*/
   //digitalWrite(_cs, LOW);
 
   for(y=h; y>0; y--) {
     for(x=w; x>0; x--) {
-      spiwrite(hi);
-      spiwrite(lo);
-    }
+//      spiwrite(hi);
+ //     spiwrite(lo);
+   spiTransferByte(fd,hi);
+   spiTransferByte(fd,lo);
+}
   }
   //digitalWrite(_cs, HIGH);
-  SET_BIT(csport, cspinmask);
+  //SET_BIT(csport, cspinmask);
 }
-
+/*
 
 // Pass 8-bit (each) R,G,B, get back 16-bit packed color
 uint16_t Adafruit_ILI9340::Color565(uint8_t r, uint8_t g, uint8_t b) {

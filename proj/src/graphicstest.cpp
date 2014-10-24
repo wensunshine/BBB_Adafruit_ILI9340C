@@ -37,6 +37,7 @@
 // Use hardware SPI
 Adafruit_ILI9340 tft = Adafruit_ILI9340(_cs, _dc, _rst);
 
+unsigned long testFillScreen(); 
 int main() {
 /*  Serial.begin(9600);
   while (!Serial);*/
@@ -44,6 +45,7 @@ int main() {
 //  Serial.println("Adafruit 2.2\" SPI TFT Test!"); 
  
   tft.begin();
+ testFillScreen();
 /*
   Serial.println(F("Benchmark                Time (microseconds)"));
   Serial.print(F("Screen fill              "));
@@ -105,18 +107,18 @@ void loop(void) {
     delay(2000);
   }
 }
-
+*/
 
 unsigned long testFillScreen() {
-  unsigned long start = micros();
+//  unsigned long start = micros();
   tft.fillScreen(ILI9340_BLACK);
   tft.fillScreen(ILI9340_RED);
   tft.fillScreen(ILI9340_GREEN);
   tft.fillScreen(ILI9340_BLUE);
   tft.fillScreen(ILI9340_BLACK);
-  return micros() - start;
+  return 0;//micros() - start;
 }
-
+/*
 unsigned long testText() {
   tft.fillScreen(ILI9340_BLACK);
   unsigned long start = micros();

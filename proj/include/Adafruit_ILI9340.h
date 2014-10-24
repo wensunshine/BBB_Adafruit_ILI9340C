@@ -129,7 +129,13 @@ class Adafruit_ILI9340 : public Adafruit_GFX {
   Adafruit_ILI9340(uint8_t CS, uint8_t RS, uint8_t RST);
 
   
-  void     begin(void);
+void begin(void);
+void fillScreen(uint16_t color);
+void fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
+             uint16_t color);
+
+void setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
+
 /*
 void     begin(void),
            setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1),
