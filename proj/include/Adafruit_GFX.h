@@ -8,13 +8,13 @@
  #include "WProgram.h"
 #endif
 */
-
+#include<stdint.h>
 #include"types.h"
-#include <stdint.h>
 #define swap(a, b) { int16_t t = a; a = b; b = t; }
 
-class Adafruit_GFX : public Print {
+//class Adafruit_GFX : public Print {
 
+class Adafruit_GFX {
  public:
 
   Adafruit_GFX(int16_t w, int16_t h); // Constructor
@@ -31,7 +31,7 @@ class Adafruit_GFX : public Print {
     drawRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color),
     fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color),
     fillScreen(uint16_t color),
-	invertDisplay(boolean i);
+    invertDisplay(boolean i);
 
   // These exist only with Adafruit_GFX (no subclass overrides)
   void

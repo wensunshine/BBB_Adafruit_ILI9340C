@@ -15,11 +15,12 @@
  ****************************************************/
 
 #include "Adafruit_ILI9340.h"
-#include <avr/pgmspace.h>
-#include <limits.h>
-#include "pins_arduino.h"
-#include "wiring_private.h"
-#include "SPI.h"
+#include "Adafruit_GFX.h"
+//#include <avr/pgmspace.h>
+//#include <limits.h>
+//#include "pins_arduino.h"
+//#include "wiring_private.h"
+#include "spi.h"
 
 #if defined(__SAM3X8E__)
 #include <include/pio.h>
@@ -40,26 +41,26 @@
 // Constructor when using software SPI.  All output pins are configurable.
 Adafruit_ILI9340::Adafruit_ILI9340(uint8_t cs, uint8_t dc, uint8_t mosi,
 				   uint8_t sclk, uint8_t rst, uint8_t miso) : Adafruit_GFX(ILI9340_TFTWIDTH, ILI9340_TFTHEIGHT) {
-  _cs   = cs;
-  _dc   = dc;
-  _mosi  = mosi;
-  _miso = miso;
-  _sclk = sclk;
-  _rst  = rst;
-  hwSPI = false;
+  cs;
+  dc;
+  mosi;
+  miso;
+  sclk;
+  rst;
+  false;
 }
 
 
 // Constructor when using hardware SPI.  Faster, but must use SPI pins
 // specific to each board type (e.g. 11,13 for Uno, 51,52 for Mega, etc.)
-Adafruit_ILI9340::Adafruit_ILI9340(uint8_t cs, uint8_t dc, uint8_t rst) : Adafruit_GFX(ILI9340_TFTWIDTH, ILI9340_TFTHEIGHT) {
-  _cs   = cs;
-  _dc   = dc;
-  _rst  = rst;
-  hwSPI = true;
-  _mosi  = _sclk = 0;
+Adafruit_ILI9340::Adafruit_ILI9340(uint8_t cs, uint8_t dc, uint8_t rst): Adafruit_GFX(ILI9340_TFTWIDTH, ILI9340_TFTHEIGHT) {
+  cs;
+  dc;
+  rst;
+  true;
+  0;
 }
-
+/*
 void Adafruit_ILI9340::spiwrite(uint8_t c) {
 
   //Serial.print("0x"); Serial.print(c, HEX); Serial.print(", ");
@@ -118,7 +119,7 @@ void Adafruit_ILI9340::writedata(uint8_t c) {
 
   //digitalWrite(_cs, HIGH);
   SET_BIT(csport, cspinmask);
-} 
+} */
 
 // Rather than a bazillion writecommand() and writedata() calls, screen
 // initialization commands and arguments are organized in these tables
@@ -129,6 +130,7 @@ void Adafruit_ILI9340::writedata(uint8_t c) {
 
 // Companion code to the above tables.  Reads and issues
 // a series of LCD commands stored in PROGMEM byte array.
+/*
 void Adafruit_ILI9340::commandList(uint8_t *addr) {
 
   uint8_t  numCommands, numArgs;
@@ -151,12 +153,12 @@ void Adafruit_ILI9340::commandList(uint8_t *addr) {
     }
   }
 }
-
+*/
 
 void Adafruit_ILI9340::begin(void) {
 int fd = initSpi();
 spiTransferByte(fd,0x10);
-closeSpi();
+closeSpi(fd);
 /*  pinMode(_rst, OUTPUT);
   digitalWrite(_rst, LOW);
   pinMode(_dc, OUTPUT);
@@ -339,7 +341,7 @@ closeSpi();
   writecommand(ILI9340_DISPON);    //Display on */ 
 }
 
-
+/*
 void Adafruit_ILI9340::setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1,
  uint16_t y1) {
 
