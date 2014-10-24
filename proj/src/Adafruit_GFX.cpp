@@ -41,7 +41,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 Adafruit_GFX::Adafruit_GFX(int16_t w, int16_t h):
-  WIDTH(w), HEIGHT(h)
+WIDTH(w), HEIGHT(h)
 {
   _width    = WIDTH;
   _height   = HEIGHT;
@@ -51,7 +51,7 @@ Adafruit_GFX::Adafruit_GFX(int16_t w, int16_t h):
   textcolor = textbgcolor = 0xFFFF;
   wrap      = true;
 }
-
+/*
 // Draw a circle outline
 void Adafruit_GFX::drawCircle(int16_t x0, int16_t y0, int16_t r,
     uint16_t color) {
@@ -324,10 +324,10 @@ void Adafruit_GFX::fillTriangle ( int16_t x0, int16_t y0,
     b   = x0 + sb / dy02;
     sa += dx01;
     sb += dx02;
-    /* longhand:
-    a = x0 + (x1 - x0) * (y - y0) / (y1 - y0);
-    b = x0 + (x2 - x0) * (y - y0) / (y2 - y0);
-    */
+    // longhand:
+    //a = x0 + (x1 - x0) * (y - y0) / (y1 - y0);
+    //b = x0 + (x2 - x0) * (y - y0) / (y2 - y0);
+    
     if(a > b) swap(a,b);
     drawFastHLine(a, y, b-a+1, color);
   }
@@ -341,10 +341,10 @@ void Adafruit_GFX::fillTriangle ( int16_t x0, int16_t y0,
     b   = x0 + sb / dy02;
     sa += dx12;
     sb += dx02;
-    /* longhand:
-    a = x1 + (x2 - x1) * (y - y1) / (y2 - y1);
-    b = x0 + (x2 - x0) * (y - y0) / (y2 - y0);
-    */
+  // longhand:
+   // a = x1 + (x2 - x1) * (y - y1) / (y2 - y1);
+   // b = x0 + (x2 - x0) * (y - y0) / (y2 - y0);
+    
     if(a > b) swap(a,b);
     drawFastHLine(a, y, b-a+1, color);
   }
@@ -518,4 +518,4 @@ int16_t Adafruit_GFX::height(void) const {
 void Adafruit_GFX::invertDisplay(boolean i) {
   // Do nothing, must be subclassed if supported
 }
-
+*/

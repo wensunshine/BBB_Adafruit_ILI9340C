@@ -9,23 +9,27 @@ LDIR =../lib
 
 LIBS=-lm
 
-
+#g++ -o graphicstest graphicstest.cpp Adafruit_ILI9340.cpp Adafruit_GFX.cpp spi.c glcdfont.c -I../include
 
 _DEPS = spi.h Adafruit_ILI9340.h Adafruit_GFX.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = graphicstest.o  spi.o Adafruit_ILI9340.o Adafruit_GFX.o 
+_OBJ = graphicstest.o  spi.o Adafruit_ILI9340.o Adafruit_GFX.o glcdfont.o 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-$(ODIR)/%.o: %.c $(DEPS)
+$(ODIR)/%.o: %.cpp $(DEPS)
 #	$(CC) -c -o $@ $< $(CFLAGS)
 	 $(CXX) -c -o $@ $< $(CFLAGS) $(CPPFLAGS)
 
-test: $(OBJ)
+$(ODIR)/%.o: %.c $(DEPS)
+	$(CXX) -c -o $@ $< $(CFLAGS) $(CPPFLAGS)
+
+test.out: $(OBJ)
 #	gcc -o $@ $^ $(CFLAGS) $(LIBS)
 	$(CXX) -o $@ $^ $(CFLAGS) $(LIBS) $(CXXFLAGS)
 
 .PHONY: clean
 
 clean:
-	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
+	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~
+		 

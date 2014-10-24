@@ -39,26 +39,26 @@
 #endif
 
 // Constructor when using software SPI.  All output pins are configurable.
-Adafruit_ILI9340::Adafruit_ILI9340(uint8_t cs, uint8_t dc, uint8_t mosi,
+/*Adafruit_ILI9340::Adafruit_ILI9340(uint8_t cs, uint8_t dc, uint8_t mosi,
 				   uint8_t sclk, uint8_t rst, uint8_t miso) : Adafruit_GFX(ILI9340_TFTWIDTH, ILI9340_TFTHEIGHT) {
-  cs;
-  dc;
-  mosi;
-  miso;
-  sclk;
-  rst;
-  false;
+  _cs = cs;
+  _dc = dc;
+  _mosi = mosi;
+  _miso = miso;
+  _sclk = sclk;
+  _rst = rst;
+  hwSPI = false;
 }
 
-
+*/
 // Constructor when using hardware SPI.  Faster, but must use SPI pins
 // specific to each board type (e.g. 11,13 for Uno, 51,52 for Mega, etc.)
 Adafruit_ILI9340::Adafruit_ILI9340(uint8_t cs, uint8_t dc, uint8_t rst): Adafruit_GFX(ILI9340_TFTWIDTH, ILI9340_TFTHEIGHT) {
-  cs;
-  dc;
-  rst;
-  true;
-  0;
+  _cs = cs;
+  _dc = dc;
+  _rst = rst;
+  hwSPI = true;
+  _mosi  = _sclk = 0;   
 }
 /*
 void Adafruit_ILI9340::spiwrite(uint8_t c) {

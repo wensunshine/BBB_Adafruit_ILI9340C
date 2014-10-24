@@ -1,2 +1,4 @@
 proj/src/obj/*.o
 proj/src/spi
+proj/src/*.vim
+proj/src/*.out

@@ -121,13 +121,17 @@
 
 class Adafruit_ILI9340 : public Adafruit_GFX {
 
+//class Adafruit_ILI9340  {
  public:
 
-  Adafruit_ILI9340(uint8_t CS, uint8_t RS, uint8_t MOSI, uint8_t SCLK,
-		   uint8_t RST, uint8_t MISO);
+/*  Adafruit_ILI9340(uint8_t CS, uint8_t RS, uint8_t MOSI, uint8_t SCLK,
+		   uint8_t RST, uint8_t MISO);*/
   Adafruit_ILI9340(uint8_t CS, uint8_t RS, uint8_t RST);
 
-  void     begin(void),
+  
+  void     begin(void);
+/*
+void     begin(void),
            setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1),
            pushColor(uint16_t color),
            fillScreen(uint16_t color),
@@ -139,22 +143,22 @@ class Adafruit_ILI9340 : public Adafruit_GFX {
            setRotation(uint8_t r),
            invertDisplay(boolean i);
   uint16_t Color565(uint8_t r, uint8_t g, uint8_t b);
-
+*/
   /* These are not for current use, 8-bit protocol only! */
-  uint8_t  readdata(void),
-           readcommand8(uint8_t);
+ /* uint8_t  readdata(void),
+           readcommand8(uint8_t);*/
   /*
-  uint16_t readcommand16(uint8_t);
-  uint32_t readcommand32(uint8_t);
-  void     dummyclock(void);
+//  uint16_t readcommand16(uint8_t);
+ // uint32_t readcommand32(uint8_t);
+  //void     dummyclock(void);
   */  
-
+/*
   void     spiwrite(uint8_t),
     writecommand(uint8_t c),
     writedata(uint8_t d),
     commandList(uint8_t *addr);
   uint8_t  spiread(void);
-
+*/
  private:
   uint8_t  tabcolor;
 
