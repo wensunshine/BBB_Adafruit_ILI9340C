@@ -25,12 +25,12 @@
 
 // These are the pins used for the UNO
 // for Due/Mega/Leonardo use the hardware SPI pins (which are different)
-#define _sclk 13
-#define _miso 12
-#define _mosi 11
-#define _cs 10
-#define _dc 9
-#define _rst 8
+#define _sclk 30 
+#define _miso 31
+#define _mosi 48
+#define _cs 51
+#define _dc 60
+#define _rst 50
 
 // Using software SPI is really not suggested, its incredibly slow
 //Adafruit_ILI9340 tft = Adafruit_ILI9340(_cs, _dc, _mosi, _sclk, _rst, _miso);

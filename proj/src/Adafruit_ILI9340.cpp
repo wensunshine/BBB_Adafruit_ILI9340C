@@ -163,6 +163,10 @@ void Adafruit_ILI9340::commandList(uint8_t *addr) {
 
 void Adafruit_ILI9340::begin(void) {
 fd = initSpi();
+gpio_export(_cs);
+gpio_export(_dc);
+gpio_export(_rst);
+
 /*  pinMode(_rst, OUTPUT);
   digitalWrite(_rst, LOW);
   pinMode(_dc, OUTPUT);
@@ -212,7 +216,7 @@ fd = initSpi();
     CLEAR_BIT(clkport, clkpinmask);
     CLEAR_BIT(mosiport, mosipinmask);
   }
-
+*/
   // toggle RST low to reset
 
   digitalWrite(_rst, HIGH);
