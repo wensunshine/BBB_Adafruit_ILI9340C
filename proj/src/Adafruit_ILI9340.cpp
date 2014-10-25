@@ -21,7 +21,13 @@
 //#include "pins_arduino.h"
 //#include "wiring_private.h"
 #include "spi.h"
+#include "Adafruit_BB_GPIO.h"
 #include <unistd.h>
+#include "SimpleGPIO.h"
+#include <stdio.h>
+#include <sys/time.h>
+#include<time.h>
+#include <stdlib.h>
 #if defined(__SAM3X8E__)
 #include <include/pio.h>
   #define SET_BIT(port, bitMask) (port)->PIO_SODR |= (bitMask)
@@ -95,34 +101,33 @@ void Adafruit_ILI9340::spiwrite(uint8_t c) {
 
 void Adafruit_ILI9340::writecommand(uint8_t c) {
   //CLEAR_BIT(dcport, dcpinmask);
-  //digitalWrite(_dc, LOW);
+  digitalWrite(_dc, LOW);
   //CLEAR_BIT(clkport, clkpinmask);
   //digitalWrite(_sclk, LOW);
   //CLEAR_BIT(csport, cspinmask);
-  //digitalWrite(_cs, LOW);
-
+  digitalWrite(_cs, LOW);
    spiTransferByte(fd,c);
 
 //closeSpi(fd);
 //  spiwrite(c);
 
   //SET_BIT(csport, cspinmask);
-  //digitalWrite(_cs, HIGH);
+  digitalWrite(_cs, HIGH);
 }
 
 
 void Adafruit_ILI9340::writedata(uint8_t c) {
   //SET_BIT(dcport,  dcpinmask);
-  //digitalWrite(_dc, HIGH);
+  digitalWrite(_dc, HIGH);
   //CLEAR_BIT(clkport, clkpinmask);
   //digitalWrite(_sclk, LOW);
   //CLEAR_BIT(csport, cspinmask);
-  //digitalWrite(_cs, LOW);
+  digitalWrite(_cs, LOW);
   
    spiTransferByte(fd,c);
   //spiwrite(c);
 
-  //digitalWrite(_cs, HIGH);
+  digitalWrite(_cs, HIGH);
   //SET_BIT(csport, cspinmask);
 } 
 /*
@@ -163,14 +168,16 @@ void Adafruit_ILI9340::commandList(uint8_t *addr) {
 
 void Adafruit_ILI9340::begin(void) {
 fd = initSpi();
+
+printf("GPIOs : _cs :%d - _dc:%d - _rst:%d",_cs,_dc,_rst);
 gpio_export(_cs);
 gpio_export(_dc);
 gpio_export(_rst);
-
-/*  pinMode(_rst, OUTPUT);
+  pinMode(_rst, OUTPUT_PIN);
   digitalWrite(_rst, LOW);
-  pinMode(_dc, OUTPUT);
-  pinMode(_cs, OUTPUT);
+  pinMode(_dc, OUTPUT_PIN);
+  pinMode(_cs, OUTPUT_PIN);
+/*
 #ifdef __AVR__
   csport    = portOutputRegister(digitalPinToPort(_cs));
   dcport    = portOutputRegister(digitalPinToPort(_dc));
@@ -345,8 +352,7 @@ gpio_export(_rst);
   writedata(0x0F); 
 
   writecommand(ILI9340_SLPOUT);    //Exit Sleep 
-  //delay(120); 		
-  usleep(120000);
+  delay(120); 		
   writecommand(ILI9340_DISPON);    //Display on 
 }
 
@@ -451,6 +457,7 @@ void Adafruit_ILI9340::drawFastHLine(int16_t x, int16_t y, int16_t w,
 }
 */
 void Adafruit_ILI9340::fillScreen(uint16_t color) {
+printf(" Width : %d Height : %d",_width, _height);
   fillRect(0, 0,  _width, _height, color);
 }
 
@@ -467,20 +474,39 @@ void Adafruit_ILI9340::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
 
   uint8_t hi = color >> 8, lo = color;
 
-  /*SET_BIT(dcport, dcpinmask);
-  //digitalWrite(_dc, HIGH);
-  CLEAR_BIT(csport, cspinmask);*/
-  //digitalWrite(_cs, LOW);
+//  SET_BIT(dcport, dcpinmask);
+  digitalWrite(_dc, HIGH);
+  //CLEAR_BIT(csport, cspinmask);
+  digitalWrite(_cs, LOW);
 
   for(y=h; y>0; y--) {
     for(x=w; x>0; x--) {
 //      spiwrite(hi);
  //     spiwrite(lo);
-   spiTransferByte(fd,hi);
+  
+     struct timeval tv;
+     struct timezone tz;
+     struct tm *tm;
+     long long timeDiff,t1 =-99;
+     gettimeofday(&tv, &tz); 
+     tm=localtime(&tv.tv_sec);
+     printf(" \n%d - ",tv.tv_usec);
+     t1=(long long)tv.tv_usec; 
+  spiTransferByte(fd,hi);
    spiTransferByte(fd,lo);
+  
+     gettimeofday(&tv, &tz); 
+	tm=localtime(&tv.tv_sec);
+   
+     printf(" %d ", tv.tv_usec);
+   timeDiff = (long long)tv.tv_usec - t1;
+   getchar();
+   printf(" Time diff = %lld\n",timeDiff);
+
 }
   }
-  //digitalWrite(_cs, HIGH);
+printf("outside loop");
+  digitalWrite(_cs, HIGH);
   //SET_BIT(csport, cspinmask);
 }
 /*

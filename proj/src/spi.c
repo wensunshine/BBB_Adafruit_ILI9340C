@@ -29,10 +29,10 @@ static void pabort(const char *s)
 	abort();
 }
 
-static const char *device = "/dev/spidev1.1";
+static const char *device = "/dev/spidev1.0";
 static uint8_t mode;
 static uint8_t bits = 8;
-static uint32_t speed = 500000;
+static uint32_t speed = 16000000;
 static uint16_t delay;
 
 int fd;
@@ -40,7 +40,7 @@ void spiTransferByte(int fd,uint8_t data)
 {
 	int ret;
 	uint8_t rx;
-	
+//printf("%d : %d : %d : %d : %d", data, sizeof(data), delay, speed, bits);	
 	struct spi_ioc_transfer tr = {
 		(unsigned long)&data,
 		(unsigned long)&rx,
@@ -54,8 +54,8 @@ void spiTransferByte(int fd,uint8_t data)
 		pabort("can't send spi message");
 
 	//Only to check loopback
-	printf("Received data %.2X ", rx);
-	puts("");
+//	printf("Received data %.2X ", rx);
+//	puts("");
 }
 
 static void transfer(int fd)

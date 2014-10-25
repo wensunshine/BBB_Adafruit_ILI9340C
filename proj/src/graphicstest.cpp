@@ -17,7 +17,6 @@
 #include "spi.h"
 #include "Adafruit_GFX.h"
 #include "Adafruit_ILI9340.h"
-
 #if defined(__SAM3X8E__)
     #undef __FlashStringHelper::F(string_literal)
     #define F(string_literal) string_literal
