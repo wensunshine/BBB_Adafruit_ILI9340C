@@ -17,6 +17,9 @@
 #include "spi.h"
 #include "Adafruit_GFX.h"
 #include "Adafruit_ILI9340.h"
+#include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
 #if defined(__SAM3X8E__)
     #undef __FlashStringHelper::F(string_literal)
     #define F(string_literal) string_literal
@@ -109,14 +112,19 @@ void loop(void) {
 */
 
 unsigned long testFillScreen() {
+uint16_t r;
+
+ srand(time(NULL));
 //  unsigned long start = micros();
 while(1)
 {
-  tft.fillScreen(ILI9340_BLACK);
+  r = (uint16_t)rand();
+  tft.fillScreen(r);
+/*  tft.fillScreen(ILI9340_BLACK);
   tft.fillScreen(ILI9340_RED);
   tft.fillScreen(ILI9340_GREEN);
   tft.fillScreen(ILI9340_BLUE);
-  //tft.fillScreen(ILI9340_BLACK);
+  //tft.fillScreen(ILI9340_BLACK);*/
 };
   return 0;//micros() - start;
 }
