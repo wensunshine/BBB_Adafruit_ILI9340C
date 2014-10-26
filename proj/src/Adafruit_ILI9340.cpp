@@ -169,8 +169,6 @@ void Adafruit_ILI9340::commandList(uint8_t *addr) {
 
 void Adafruit_ILI9340::begin(void) {
 fd = initSpi();
-
-printf("GPIOs : _cs :%d - _dc:%d - _rst:%d",_cs,_dc,_rst);
 gpio_export(_cs);
 gpio_export(_dc);
 gpio_export(_rst);
@@ -458,13 +456,12 @@ void Adafruit_ILI9340::drawFastHLine(int16_t x, int16_t y, int16_t w,
 }
 */
 void Adafruit_ILI9340::fillScreen(uint16_t color) {
-printf(" Width : %d Height : %d",_width, _height);
   fillRect(0, 0,  _width, _height, color);
 }
 
 #define LCDWIDTH 240
-#define LINES 5
-#define ARRAYSIZE LCDWIDTH*LINES*2
+#define LINES 340
+#define ARRAYSIZE (LCDWIDTH*LINES*2)
 // fill a rectangle
 void Adafruit_ILI9340::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
   uint16_t color) {
@@ -479,52 +476,24 @@ void Adafruit_ILI9340::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
 
   uint8_t hi = color >> 8, lo = color;
   int i=0;
-  printf(" w - h %d - %d",w,h);  
-  getchar();
 //  SET_BIT(dcport, dcpinmask);
   digitalWrite(_dc, HIGH);
   //CLEAR_BIT(csport, cspinmask);
   digitalWrite(_cs, LOW);
 
   for(y=h; y>0; y--) {
-    if(y==  h-5) break;
     for(x=w; x>0; x--) {
 //      spiwrite(hi);
  //     spiwrite(lo);
-  
        data[i]=hi;
         i++;
        data[i]=lo;
         i++;
-    printf("%d - ",i);
-/*     struct timeval tv;
-     struct timezone tz;
-     struct tm *tm;
-     long long timeDiff,t1 =-99;
-     gettimeofday(&tv, &tz); 
-     tm=localtime(&tv.tv_sec);
-     t1=(long long)tv.tv_usec; 
-//  spiTransferByte(fd,hi);
-
-//  transfer(fd);
-//   spiTransferByte(fd,lo);
-  
-     gettimeofday(&tv, &tz); 
-	tm=localtime(&tv.tv_sec);
-   
-   timeDiff = (long long)tv.tv_usec - t1;
-   getchar();
-   printf(" Time diff = %lld\n",timeDiff);*/
-
-}
-
+	}
   }
-getchar();
-printf("\n i = %d : Sending Burst", 5);
-getchar();
-spiTransferBurst(fd,data,240);
+spiTransferBurst(fd,data,ARRAYSIZE);
   digitalWrite(_cs, HIGH);
- closeSpi(fd);
+// closeSpi(fd);
   //SET_BIT(csport, cspinmask);
 }
 /*

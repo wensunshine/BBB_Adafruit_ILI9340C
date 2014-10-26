@@ -110,11 +110,14 @@ void loop(void) {
 
 unsigned long testFillScreen() {
 //  unsigned long start = micros();
+while(1)
+{
   tft.fillScreen(ILI9340_BLACK);
   tft.fillScreen(ILI9340_RED);
   tft.fillScreen(ILI9340_GREEN);
   tft.fillScreen(ILI9340_BLUE);
-  tft.fillScreen(ILI9340_BLACK);
+  //tft.fillScreen(ILI9340_BLACK);
+};
   return 0;//micros() - start;
 }
 /*

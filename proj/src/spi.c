@@ -30,36 +30,39 @@ static void pabort(const char *s)
 	abort();
 }
 
-static const char *device = "/dev/spidev1.0";
+static const char *device = "/dev/spidev1.1";
 static uint8_t mode;
 static uint8_t bits = 8;
-static uint32_t speed = 16000000;
+static uint32_t speed = 8000000;
 static uint16_t delay;
-
+#define SPITXBUFFERSIZE (240*5*2) //configuring for 5 lines per transfer (max 8 lines empirically )
 int fd;
 void spiTransferBurst(int fd,uint8_t *data,int length)
 {
 	int ret;
-	uint8_t rx;
-        uint8_t tx[240 * 5 *2]={0}; 	
+	struct spi_ioc_transfer tr;
+        uint8_t tx[240*340*2]={0,}; 	
+	uint8_t rx[ARRAY_SIZE(tx)] = {0, };
+	uint8_t *txAddr = tx;                    
 
-printf("%d : %d : %d : %d : %d : %d", data, sizeof(data), delay, speed, bits,length);	
-getchar();
-//        memcpy(tx, data, length);
-printf("%d : %d : %d : %d : %d", data, sizeof(data), delay, speed, bits);	
-getchar();
-	struct spi_ioc_transfer tr = {
-		(unsigned long)data,
-		(unsigned long) &rx,
-		length/4,
-		delay,
-		speed,
-		bits,
-	};
-	ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
-	if (ret < 1)
-		pabort("can't send spi message");
-
+	memcpy(tx, data, length);
+//	printf(" %d : %d  - %d\n", ARRAY_SIZE(tx),SPITXBUFFERSIZE,(int)(ARRAY_SIZE(tx)/SPITXBUFFERSIZE));
+	
+	for (int i=0;i<(ARRAY_SIZE(tx)/SPITXBUFFERSIZE)-4;i++) 
+		{
+			tr.tx_buf = (unsigned long)txAddr;
+			tr.rx_buf = (unsigned long)rx;
+			tr.len = SPITXBUFFERSIZE;
+			tr.delay_usecs = delay;
+			tr.speed_hz = speed;
+			tr.bits_per_word = bits;
+//			getchar();
+//			printf(" - %d - ",i); 		
+			ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
+			if (ret < 1)
+			pabort("can't send spi message");
+			txAddr = &tx[i*SPITXBUFFERSIZE];	
+		}
 	//Only to check loopback
 //	printf("Received data %.2X ", rx);
 //	puts("");
