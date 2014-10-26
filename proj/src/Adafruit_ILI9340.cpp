@@ -131,7 +131,6 @@ void Adafruit_ILI9340::writedata(uint8_t c) {
   digitalWrite(_cs, HIGH);
   //SET_BIT(csport, cspinmask);
 } 
-/*
 
 // Rather than a bazillion writecommand() and writedata() calls, screen
 // initialization commands and arguments are organized in these tables
@@ -142,8 +141,7 @@ void Adafruit_ILI9340::writedata(uint8_t c) {
 
 // Companion code to the above tables.  Reads and issues
 // a series of LCD commands stored in PROGMEM byte array.
-/*
-void Adafruit_ILI9340::commandList(uint8_t *addr) {
+/*void Adafruit_ILI9340::commandList(uint8_t *addr) {
 
   uint8_t  numCommands, numArgs;
   uint16_t ms;
@@ -166,7 +164,6 @@ void Adafruit_ILI9340::commandList(uint8_t *addr) {
   }
 }
 */
-
 void Adafruit_ILI9340::begin(void) {
 fd = initSpi();
 gpio_export(_cs);
@@ -374,7 +371,6 @@ void Adafruit_ILI9340::setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1,
   writecommand(ILI9340_RAMWR); // write to RAM
 }
 
-/*
 void Adafruit_ILI9340::pushColor(uint16_t color) {
   //digitalWrite(_dc, HIGH);
   SET_BIT(dcport, dcpinmask);
@@ -394,16 +390,16 @@ void Adafruit_ILI9340::drawPixel(int16_t x, int16_t y, uint16_t color) {
 
   setAddrWindow(x,y,x+1,y+1);
 
-  //digitalWrite(_dc, HIGH);
-  SET_BIT(dcport, dcpinmask);
-  //digitalWrite(_cs, LOW);
-  CLEAR_BIT(csport, cspinmask);
+  digitalWrite(_dc, HIGH);
+  //SET_BIT(dcport, dcpinmask);
+  digitalWrite(_cs, LOW);
+  //CLEAR_BIT(csport, cspinmask);
 
   spiwrite(color >> 8);
   spiwrite(color);
 
-  SET_BIT(csport, cspinmask);
-  //digitalWrite(_cs, HIGH);
+  //SET_BIT(csport, cspinmask);
+  digitalWrite(_cs, HIGH);
 }
 
 
@@ -454,7 +450,6 @@ void Adafruit_ILI9340::drawFastHLine(int16_t x, int16_t y, int16_t w,
   SET_BIT(csport, cspinmask);
   //digitalWrite(_cs, HIGH);
 }
-*/
 void Adafruit_ILI9340::fillScreen(uint16_t color) {
   fillRect(0, 0,  _width, _height, color);
 }
@@ -496,7 +491,6 @@ spiTransferBurst(fd,data,ARRAYSIZE);
 // closeSpi(fd);
   //SET_BIT(csport, cspinmask);
 }
-/*
 
 // Pass 8-bit (each) R,G,B, get back 16-bit packed color
 uint16_t Adafruit_ILI9340::Color565(uint8_t r, uint8_t g, uint8_t b) {
@@ -540,7 +534,7 @@ void Adafruit_ILI9340::invertDisplay(boolean i) {
 
 ////////// stuff not actively being used, but kept for posterity
 
-
+/*
 uint8_t Adafruit_ILI9340::spiread(void) {
   uint8_t r = 0;
 
@@ -551,7 +545,7 @@ uint8_t Adafruit_ILI9340::spiread(void) {
     r = SPDR;
 #endif
 #if defined(USE_SPI_LIBRARY)
-    r = SPI.transfer(0x00);
+//    r = SPI.transfer(0x00);
 #endif
   } else {
 
@@ -567,8 +561,8 @@ uint8_t Adafruit_ILI9340::spiread(void) {
   
   return r;
 }
-
- uint8_t Adafruit_ILI9340::readdata(void) {
+*/
+/* uint8_t Adafruit_ILI9340::readdata(void) {
    digitalWrite(_dc, HIGH);
    digitalWrite(_cs, LOW);
    uint8_t r = spiread();
@@ -590,10 +584,7 @@ uint8_t Adafruit_ILI9340::spiread(void) {
    return r;
 }
 
-
  
-/*
-
  uint16_t Adafruit_ILI9340::readcommand16(uint8_t c) {
  digitalWrite(_dc, LOW);
  if (_cs)
@@ -611,7 +602,7 @@ uint8_t Adafruit_ILI9340::spiread(void) {
  return r;
  }
  
- uint32_t Adafruit_ILI9340::readcommand32(uint8_t c) {
+uint32_t Adafruit_ILI9340::readcommand32(uint8_t c) {
  digitalWrite(_dc, LOW);
  if (_cs)
  digitalWrite(_cs, LOW);
@@ -634,5 +625,4 @@ uint8_t Adafruit_ILI9340::spiread(void) {
  pinMode(_sid, OUTPUT); // back to output
  return r;
  }
- 
- */
+*/ 

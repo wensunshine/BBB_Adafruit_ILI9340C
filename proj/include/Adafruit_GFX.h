@@ -20,7 +20,7 @@ class Adafruit_GFX {
  public:
 
   Adafruit_GFX(int16_t w, int16_t h); // Constructor
-/*
+
   // This MUST be defined by the subclass:
   virtual void drawPixel(int16_t x, int16_t y, uint16_t color) = 0;
 
@@ -76,7 +76,7 @@ class Adafruit_GFX {
   int16_t width(void) const;
 
   uint8_t getRotation(void) const;
-*/
+
  protected:
   const int16_t
     WIDTH, HEIGHT;   // This is the 'raw' display w/h - never changes

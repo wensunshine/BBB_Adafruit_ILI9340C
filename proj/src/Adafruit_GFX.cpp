@@ -51,7 +51,7 @@ WIDTH(w), HEIGHT(h)
   textcolor = textbgcolor = 0xFFFF;
   wrap      = true;
 }
-/*
+
 // Draw a circle outline
 void Adafruit_GFX::drawCircle(int16_t x0, int16_t y0, int16_t r,
     uint16_t color) {
@@ -518,4 +518,4 @@ int16_t Adafruit_GFX::height(void) const {
 void Adafruit_GFX::invertDisplay(boolean i) {
   // Do nothing, must be subclassed if supported
 }
-*/
+

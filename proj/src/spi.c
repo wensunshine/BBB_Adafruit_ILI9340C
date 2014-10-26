@@ -37,6 +37,8 @@ static uint32_t speed = 16000000;
 static uint16_t delay;
 #define SPITXBUFFERSIZE (240*5*2) //configuring for 5 lines per transfer (max 8 lines empirically )
 int fd;
+
+ 
 void spiTransferBurst(int fd,uint8_t *data,int length)
 {
 	int ret;
@@ -46,7 +48,6 @@ void spiTransferBurst(int fd,uint8_t *data,int length)
 	uint8_t *txAddr = tx;                    
 
 	memcpy(tx, data, length);
-//	printf(" %d : %d  - %d\n", ARRAY_SIZE(tx),SPITXBUFFERSIZE,(int)(ARRAY_SIZE(tx)/SPITXBUFFERSIZE));
 	
 	for (int i=0;i<(ARRAY_SIZE(tx)/SPITXBUFFERSIZE)-4;i++) 
 		{
@@ -56,8 +57,6 @@ void spiTransferBurst(int fd,uint8_t *data,int length)
 			tr.delay_usecs = delay;
 			tr.speed_hz = speed;
 			tr.bits_per_word = bits;
-//			getchar();
-//			printf(" - %d - ",i); 		
 			ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
 			if (ret < 1)
 			pabort("can't send spi message");
@@ -88,6 +87,13 @@ void spiTransferByte(int fd,uint8_t data)
 	//Only to check loopback
 //	printf("Received data %.2X ", rx);
 //	puts("");
+}
+
+void spiwrite(uint16_t data)
+{
+
+//spiTransferByte(fd,(uint8_t) (data>>8));
+spiTransferByte(fd,(uint8_t) data);
 }
 
 void transfer(int fd)
