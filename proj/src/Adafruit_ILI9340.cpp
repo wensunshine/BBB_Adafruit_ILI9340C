@@ -44,6 +44,7 @@
   #define CLEAR_BIT(port, bitMask) digitalWrite(*(port), LOW);
 #endif
 extern int fd;
+
 // Constructor when using software SPI.  All output pins are configurable.
 /*Adafruit_ILI9340::Adafruit_ILI9340(uint8_t cs, uint8_t dc, uint8_t mosi,
 				   uint8_t sclk, uint8_t rst, uint8_t miso) : Adafruit_GFX(ILI9340_TFTWIDTH, ILI9340_TFTHEIGHT) {
@@ -461,10 +462,14 @@ printf(" Width : %d Height : %d",_width, _height);
   fillRect(0, 0,  _width, _height, color);
 }
 
+#define LCDWIDTH 240
+#define LINES 5
+#define ARRAYSIZE LCDWIDTH*LINES*2
 // fill a rectangle
 void Adafruit_ILI9340::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
   uint16_t color) {
 
+  static uint8_t data[ARRAYSIZE]={0};
   // rudimentary clipping (drawChar w/big text requires this)
   if((x >= _width) || (y >= _height)) return;
   if((x + w - 1) >= _width)  w = _width  - x;
@@ -473,40 +478,53 @@ void Adafruit_ILI9340::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
   setAddrWindow(x, y, x+w-1, y+h-1);
 
   uint8_t hi = color >> 8, lo = color;
-
+  int i=0;
+  printf(" w - h %d - %d",w,h);  
+  getchar();
 //  SET_BIT(dcport, dcpinmask);
   digitalWrite(_dc, HIGH);
   //CLEAR_BIT(csport, cspinmask);
   digitalWrite(_cs, LOW);
 
   for(y=h; y>0; y--) {
+    if(y==  h-5) break;
     for(x=w; x>0; x--) {
 //      spiwrite(hi);
  //     spiwrite(lo);
   
-     struct timeval tv;
+       data[i]=hi;
+        i++;
+       data[i]=lo;
+        i++;
+    printf("%d - ",i);
+/*     struct timeval tv;
      struct timezone tz;
      struct tm *tm;
      long long timeDiff,t1 =-99;
      gettimeofday(&tv, &tz); 
      tm=localtime(&tv.tv_sec);
-     printf(" \n%d - ",tv.tv_usec);
      t1=(long long)tv.tv_usec; 
-  spiTransferByte(fd,hi);
-   spiTransferByte(fd,lo);
+//  spiTransferByte(fd,hi);
+
+//  transfer(fd);
+//   spiTransferByte(fd,lo);
   
      gettimeofday(&tv, &tz); 
 	tm=localtime(&tv.tv_sec);
    
-     printf(" %d ", tv.tv_usec);
    timeDiff = (long long)tv.tv_usec - t1;
    getchar();
-   printf(" Time diff = %lld\n",timeDiff);
+   printf(" Time diff = %lld\n",timeDiff);*/
 
 }
+
   }
-printf("outside loop");
+getchar();
+printf("\n i = %d : Sending Burst", 5);
+getchar();
+spiTransferBurst(fd,data,240);
   digitalWrite(_cs, HIGH);
+ closeSpi(fd);
   //SET_BIT(csport, cspinmask);
 }
 /*

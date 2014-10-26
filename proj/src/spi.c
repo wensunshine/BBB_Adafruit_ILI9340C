@@ -20,6 +20,7 @@
 #include <sys/ioctl.h>
 #include <linux/types.h>
 #include <linux/spi/spidev.h>
+#include <string.h>
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
 
@@ -36,6 +37,34 @@ static uint32_t speed = 16000000;
 static uint16_t delay;
 
 int fd;
+void spiTransferBurst(int fd,uint8_t *data,int length)
+{
+	int ret;
+	uint8_t rx;
+        uint8_t tx[240 * 5 *2]={0}; 	
+
+printf("%d : %d : %d : %d : %d : %d", data, sizeof(data), delay, speed, bits,length);	
+getchar();
+//        memcpy(tx, data, length);
+printf("%d : %d : %d : %d : %d", data, sizeof(data), delay, speed, bits);	
+getchar();
+	struct spi_ioc_transfer tr = {
+		(unsigned long)data,
+		(unsigned long) &rx,
+		length/4,
+		delay,
+		speed,
+		bits,
+	};
+	ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
+	if (ret < 1)
+		pabort("can't send spi message");
+
+	//Only to check loopback
+//	printf("Received data %.2X ", rx);
+//	puts("");
+}
+
 void spiTransferByte(int fd,uint8_t data)
 {
 	int ret;
@@ -43,7 +72,7 @@ void spiTransferByte(int fd,uint8_t data)
 //printf("%d : %d : %d : %d : %d", data, sizeof(data), delay, speed, bits);	
 	struct spi_ioc_transfer tr = {
 		(unsigned long)&data,
-		(unsigned long)&rx,
+		(unsigned long) &rx,
 		sizeof(data),
 		delay,
 		speed,
@@ -58,7 +87,7 @@ void spiTransferByte(int fd,uint8_t data)
 //	puts("");
 }
 
-static void transfer(int fd)
+void transfer(int fd)
 {
 	int ret;
 	uint8_t tx[] = {
@@ -84,12 +113,12 @@ static void transfer(int fd)
 	if (ret < 1)
 		pabort("can't send spi message");
 
-	for (ret = 0; ret < ARRAY_SIZE(tx); ret++) {
+/*	for (ret = 0; ret < ARRAY_SIZE(tx); ret++) {
 		if (!(ret % 6))
 			puts("");
 		printf("%.2X ", rx[ret]);
 	}
-	puts("");
+	puts("");*/
 }
 
 static void print_usage(const char *prog)
