@@ -49,23 +49,26 @@ else return b;
 
 unsigned long testFillScreen() {
 uint16_t r;
-
+uint8_t i;
  srand(time(NULL));
 //  unsigned long start = micros();
-//while(1)
+while(1)
 {
+
+  tft.setRotation(i++);
   //r = (uint16_t)rand();
-  //tft.fillScreen(r);
-  delay(500);
-  tft.fillScreen(ILI9340_BLACK);
-  delay(500);
+//  tft.fillScreen(r);
+  //delay(500);
+//  tft.fillScreen(ILI9340_BLACK);
+  //delay(500);
   tft.fillScreen(ILI9340_RED);
-  delay(500);
+  //delay(500);
   tft.fillScreen(ILI9340_GREEN);
-  delay(500);
+  //delay(500);
   tft.fillScreen(ILI9340_BLUE);
-  delay(500);
-  tft.fillScreen(ILI9340_BLACK);
+  //delay(500);
+  //tft.fillScreen(ILI9340_BLACK);
+  getchar();
 };
   return 0;//micros() - start;
 }
@@ -309,12 +312,11 @@ unsigned long testFilledRoundRects() {
 int main() {
   
   printf("Adafruit 2.2\" SPI TFT Test!"); 
- 
   tft.begin();
-
+//  tft.invertDisplay(1); 
   printf("Benchmark                Time (microseconds)");
   printf("Screen fill              ");
-  //(testFillScreen());
+  (testFillScreen());
   delay(500);
 //  getchar();
   printf("Text                     ");

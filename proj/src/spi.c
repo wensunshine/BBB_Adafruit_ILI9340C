@@ -33,9 +33,9 @@ static void pabort(const char *s)
 static const char *device = "/dev/spidev1.1";
 static uint8_t mode;
 static uint8_t bits = 8;
-static uint32_t speed = 16000000;
-static uint16_t delay;
-#define SPITXBUFFERSIZE (240*5*2) //configuring for 5 lines per transfer (max 8 lines empirically )
+static uint32_t speed = 48000000;
+static uint16_t delay=0;
+#define SPITXBUFFERSIZE (240*320*2) //using columns lines less
 int fd;
 
  
@@ -49,7 +49,7 @@ void spiTransferBurst(int fd,uint8_t *data,int length)
 
 	memcpy(tx, data, length);
 	
-	for (int i=0;i<(ARRAY_SIZE(tx)/SPITXBUFFERSIZE)-4;i++) 
+	for (int i=0;i<(ARRAY_SIZE(tx)/SPITXBUFFERSIZE);i++) 
 		{
 			tr.tx_buf = (unsigned long)txAddr;
 			tr.rx_buf = (unsigned long)rx;
