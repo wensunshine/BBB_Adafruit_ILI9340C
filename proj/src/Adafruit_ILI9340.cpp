@@ -45,6 +45,10 @@
 #endif
 extern int fd;
 
+
+#define LCDWIDTH 240
+#define LINES 340
+#define ARRAYSIZE (LCDWIDTH*LINES*2)
 // Constructor when using software SPI.  All output pins are configurable.
 /*Adafruit_ILI9340::Adafruit_ILI9340(uint8_t cs, uint8_t dc, uint8_t mosi,
 				   uint8_t sclk, uint8_t rst, uint8_t miso) : Adafruit_GFX(ILI9340_TFTWIDTH, ILI9340_TFTHEIGHT) {
@@ -384,9 +388,19 @@ void Adafruit_ILI9340::pushColor(uint16_t color) {
   //digitalWrite(_cs, HIGH);
 }
 
+void Adafruit_ILI9340::storePixel(int16_t x, int16_t y, uint16_t color) {
+
+  if((x < 0) ||(x >= _width) || (y < 0) || (y >= _height)) return;
+  dispBuffer[x][y] = color;
+}
 void Adafruit_ILI9340::drawPixel(int16_t x, int16_t y, uint16_t color) {
 
   if((x < 0) ||(x >= _width) || (y < 0) || (y >= _height)) return;
+
+#ifdef BeagleBoneBlack
+storePixel(x,y,color);
+#else
+
 
   setAddrWindow(x,y,x+1,y+1);
 
@@ -400,6 +414,7 @@ void Adafruit_ILI9340::drawPixel(int16_t x, int16_t y, uint16_t color) {
 
   //SET_BIT(csport, cspinmask);
   digitalWrite(_cs, HIGH);
+#endif
 }
 
 
@@ -450,13 +465,55 @@ void Adafruit_ILI9340::drawFastHLine(int16_t x, int16_t y, int16_t w,
   SET_BIT(csport, cspinmask);
   //digitalWrite(_cs, HIGH);
 }
-void Adafruit_ILI9340::fillScreen(uint16_t color) {
-  fillRect(0, 0,  _width, _height, color);
+
+void Adafruit_ILI9340::clearBuffer(){
+memset(dispBuffer, 0, sizeof(dispBuffer));
+}
+void Adafruit_ILI9340::clearBufferScreen(){
+
+  static uint8_t data[ARRAYSIZE]={0};
+
+  digitalWrite(_dc, HIGH);
+  digitalWrite(_cs, LOW);
+  
+  spiTransferBurst(fd,data,ARRAYSIZE);
+  digitalWrite(_cs, HIGH);
+
 }
 
-#define LCDWIDTH 240
-#define LINES 340
-#define ARRAYSIZE (LCDWIDTH*LINES*2)
+void Adafruit_ILI9340::fillBufferScreen(){
+  fillDisplay(0, 0,  _width, _height);
+}
+
+void Adafruit_ILI9340::fillDisplay(int16_t x, int16_t y, int16_t w, int16_t h) {
+
+  static uint8_t data[ARRAYSIZE]={0};
+  // rudimentary clipping (drawChar w/big text requires this)
+  if((x >= _width) || (y >= _height)) return;
+  if((x + w - 1) >= _width)  w = _width  - x;
+  if((y + h - 1) >= _height) h = _height - y;
+
+  setAddrWindow(x, y, x+w-1, y+h-1);
+
+  int i=0;
+ 
+  for(y=h; y>0; y--) {
+    for(x=w; x>0; x--) {
+       data[i]=dispBuffer[x][y]>>8;
+       data[i+1]=dispBuffer[x][y];
+	i+=2;
+	}
+  }
+  digitalWrite(_dc, HIGH);
+  digitalWrite(_cs, LOW);
+  
+  spiTransferBurst(fd,data,ARRAYSIZE);
+  digitalWrite(_cs, HIGH);
+}
+
+void Adafruit_ILI9340::fillScreen(uint16_t color) {
+  fillRect(0, 0,  _width, _height,color);
+}
 // fill a rectangle
 void Adafruit_ILI9340::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
   uint16_t color) {

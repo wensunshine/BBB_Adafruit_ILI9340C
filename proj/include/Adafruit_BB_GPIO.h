@@ -3,7 +3,9 @@
 
 #include "SimpleGPIO.h"
 #include <stdint.h>
+ #include <string.h>
 
+#define BeagleBoneBlack
 
 uint8_t digitalWrite(uint8_t port, PIN_VALUE value);  
 uint8_t pinMode(uint8_t port, PIN_DIRECTION out_flag);  

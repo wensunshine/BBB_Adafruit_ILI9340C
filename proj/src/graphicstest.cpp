@@ -52,10 +52,10 @@ uint16_t r;
 uint8_t i;
  srand(time(NULL));
 //  unsigned long start = micros();
-while(1)
+//while(1)
 {
 
-  tft.setRotation(i++);
+//  tft.setRotation(i++);
   //r = (uint16_t)rand();
 //  tft.fillScreen(r);
   //delay(500);
@@ -111,48 +111,77 @@ unsigned long testLines(uint16_t color) {
                 w = tft.width(),
                 h = tft.height();
 
+  tft.clearBuffer();
   tft.fillScreen(ILI9340_BLACK);
 
   x1 = y1 = 0;
   y2    = h - 1;
   //start = micros();
   for(x2=0; x2<w; x2+=6) tft.drawLine(x1, y1, x2, y2, color);
+  tft.fillBufferScreen();
+//getchar();
+ // tft.clearBuffer();
+  delay(200);
   x2    = w - 1;
   for(y2=0; y2<h; y2+=6) tft.drawLine(x1, y1, x2, y2, color);
+  tft.fillBufferScreen();
+  delay(200);
   //t     = micros() - start; // fillScreen doesn't count against timing
 
   tft.fillScreen(ILI9340_BLACK);
 
+
+  tft.clearBuffer();
   x1    = w - 1;
   y1    = 0;
   y2    = h - 1;
   //start = micros();
   for(x2=0; x2<w; x2+=6) tft.drawLine(x1, y1, x2, y2, color);
+
+  tft.fillBufferScreen();
+ // tft.clearBuffer();
+  delay(200);
+
   x2    = 0;
   for(y2=0; y2<h; y2+=6) tft.drawLine(x1, y1, x2, y2, color);
   //t    += micros() - start;
 
+  tft.fillBufferScreen();
+
+  delay(200);
+
+
   tft.fillScreen(ILI9340_BLACK);
 
+  tft.clearBuffer();
   x1    = 0;
   y1    = h - 1;
   y2    = 0;
   //start = micros();
   for(x2=0; x2<w; x2+=6) tft.drawLine(x1, y1, x2, y2, color);
+  tft.fillBufferScreen();
+  delay(200);
   x2    = w - 1;
   for(y2=0; y2<h; y2+=6) tft.drawLine(x1, y1, x2, y2, color);
+  
+  tft.fillBufferScreen();
   //t    += micros() - start;
 
   tft.fillScreen(ILI9340_BLACK);
 
+  tft.clearBuffer();
   x1    = w - 1;
   y1    = h - 1;
   y2    = 0;
   //start = micros();
   for(x2=0; x2<w; x2+=6) tft.drawLine(x1, y1, x2, y2, color);
+  tft.fillBufferScreen();
+  delay(200);
   x2    = 0;
   for(y2=0; y2<h; y2+=6) tft.drawLine(x1, y1, x2, y2, color);
-
+  tft.fillBufferScreen();
+  delay(200);
+  
   return 0;//micros() - start;
 }
 
@@ -317,17 +346,17 @@ int main() {
   printf("Benchmark                Time (microseconds)");
   printf("Screen fill              ");
   (testFillScreen());
-  delay(500);
+ // delay(500);
 //  getchar();
   printf("Text                     ");
  // (testText());
-  delay(3000);
+//  delay(3000);
 //  getchar();
   printf("Lines                    ");
   (testLines(ILI9340_CYAN));
   delay(500);
 
-  getchar();
+//  getchar();
   printf("Horiz/Vert Lines         ");
   (testFastLines(ILI9340_RED, ILI9340_BLUE));
   delay(500);

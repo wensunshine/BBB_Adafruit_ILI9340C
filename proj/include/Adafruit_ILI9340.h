@@ -165,10 +165,16 @@ void     begin(void),
     commandList(uint8_t *addr);
   uint8_t  spiread(void);
 
+// New function to store pixel values in the buffer
+void storePixel(int16_t x, int16_t y, uint16_t color);
+void fillBufferScreen();
+void clearBuffer();
+void clearBufferScreen();
+void fillDisplay(int16_t x, int16_t y, int16_t w, int16_t h);
  private:
   uint8_t  tabcolor;
 
-
+  uint16_t dispBuffer [240][320]; 
 
   boolean  hwSPI;
 #ifdef __AVR__  
