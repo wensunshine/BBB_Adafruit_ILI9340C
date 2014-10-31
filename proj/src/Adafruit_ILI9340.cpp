@@ -47,7 +47,7 @@ extern int fd;
 
 
 #define LCDWIDTH 240
-#define LINES 340
+#define LINES 320
 #define ARRAYSIZE (LCDWIDTH*LINES*2)
 // Constructor when using software SPI.  All output pins are configurable.
 /*Adafruit_ILI9340::Adafruit_ILI9340(uint8_t cs, uint8_t dc, uint8_t mosi,
@@ -398,6 +398,7 @@ void Adafruit_ILI9340::drawPixel(int16_t x, int16_t y, uint16_t color) {
   if((x < 0) ||(x >= _width) || (y < 0) || (y >= _height)) return;
 
 #ifdef BeagleBoneBlack
+printf(" %d - %d\n ",x,y);
 storePixel(x,y,color);
 #else
 
@@ -497,12 +498,21 @@ void Adafruit_ILI9340::fillDisplay(int16_t x, int16_t y, int16_t w, int16_t h) {
 
   int i=0;
  
-  for(y=h; y>0; y--) {
-    for(x=w; x>0; x--) {
+  for(y=0; y<h; y++) {
+    for(x=0; x<w; x++) {
        data[i]=dispBuffer[x][y]>>8;
        data[i+1]=dispBuffer[x][y];
+       	if(y<10)
+	{
+	printf("%d ",dispBuffer[x][y]);
+//	getchar();
+	}
 	i+=2;
 	}
+printf("\n");
+
+   	if(y<30)
+getchar();
   }
   digitalWrite(_dc, HIGH);
   digitalWrite(_cs, LOW);

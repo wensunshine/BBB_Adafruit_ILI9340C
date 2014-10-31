@@ -55,7 +55,7 @@ uint8_t i;
 //while(1)
 {
 
-//  tft.setRotation(i++);
+  tft.setRotation(0);
   //r = (uint16_t)rand();
 //  tft.fillScreen(r);
   //delay(500);
@@ -68,7 +68,7 @@ uint8_t i;
   tft.fillScreen(ILI9340_BLUE);
   //delay(500);
   //tft.fillScreen(ILI9340_BLACK);
-  getchar();
+//  getchar();
 };
   return 0;//micros() - start;
 }
@@ -117,14 +117,16 @@ unsigned long testLines(uint16_t color) {
   x1 = y1 = 0;
   y2    = h - 1;
   //start = micros();
-  for(x2=0; x2<w; x2+=6) tft.drawLine(x1, y1, x2, y2, color);
-  tft.fillBufferScreen();
+//  for(x2=0; x2<w; x2+=5) {tft.drawLine(x1, y1, x2, y2, color);getchar();
+//  tft.fillBufferScreen();}
 //getchar();
- // tft.clearBuffer();
+
+//  tft.fillBufferScreen();
+  tft.clearBuffer();
   delay(200);
   x2    = w - 1;
-  for(y2=0; y2<h; y2+=6) tft.drawLine(x1, y1, x2, y2, color);
-  tft.fillBufferScreen();
+ for(y2=0; y2<h; y2+=10) {tft.drawLine(x1, y1, x2, y2, color);getchar();
+  tft.fillBufferScreen();}
   delay(200);
   //t     = micros() - start; // fillScreen doesn't count against timing
 
@@ -136,17 +138,17 @@ unsigned long testLines(uint16_t color) {
   y1    = 0;
   y2    = h - 1;
   //start = micros();
-  for(x2=0; x2<w; x2+=6) tft.drawLine(x1, y1, x2, y2, color);
+  for(x2=0; x2<w; x2+=6) {tft.drawLine(x1, y1, x2, y2, color);
 
-  tft.fillBufferScreen();
+  tft.fillBufferScreen();}
  // tft.clearBuffer();
   delay(200);
 
   x2    = 0;
-  for(y2=0; y2<h; y2+=6) tft.drawLine(x1, y1, x2, y2, color);
+  for(y2=0; y2<h; y2+=6) {tft.drawLine(x1, y1, x2, y2, color);
   //t    += micros() - start;
 
-  tft.fillBufferScreen();
+  tft.fillBufferScreen();}
 
   delay(200);
 
@@ -158,13 +160,13 @@ unsigned long testLines(uint16_t color) {
   y1    = h - 1;
   y2    = 0;
   //start = micros();
-  for(x2=0; x2<w; x2+=6) tft.drawLine(x1, y1, x2, y2, color);
-  tft.fillBufferScreen();
+  for(x2=0; x2<w; x2+=6) {tft.drawLine(x1, y1, x2, y2, color);
+  tft.fillBufferScreen();}
   delay(200);
   x2    = w - 1;
-  for(y2=0; y2<h; y2+=6) tft.drawLine(x1, y1, x2, y2, color);
+  for(y2=0; y2<h; y2+=6) {tft.drawLine(x1, y1, x2, y2, color);
   
-  tft.fillBufferScreen();
+  tft.fillBufferScreen();}
   //t    += micros() - start;
 
   tft.fillScreen(ILI9340_BLACK);
@@ -174,12 +176,12 @@ unsigned long testLines(uint16_t color) {
   y1    = h - 1;
   y2    = 0;
   //start = micros();
-  for(x2=0; x2<w; x2+=6) tft.drawLine(x1, y1, x2, y2, color);
-  tft.fillBufferScreen();
+  for(x2=0; x2<w; x2+=6) {tft.drawLine(x1, y1, x2, y2, color);
+  tft.fillBufferScreen();}
   delay(200);
   x2    = 0;
-  for(y2=0; y2<h; y2+=6) tft.drawLine(x1, y1, x2, y2, color);
-  tft.fillBufferScreen();
+  for(y2=0; y2<h; y2+=6) {tft.drawLine(x1, y1, x2, y2, color);
+  tft.fillBufferScreen();}
   delay(200);
   
   return 0;//micros() - start;

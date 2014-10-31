@@ -35,7 +35,7 @@ static uint8_t mode;
 static uint8_t bits = 8;
 static uint32_t speed = 48000000;
 static uint16_t delay=0;
-#define SPITXBUFFERSIZE (240*8*2) //using columns lines less
+#define SPITXBUFFERSIZE (240*5*2) //using columns lines less
 int fd;
 
  
@@ -43,13 +43,12 @@ void spiTransferBurst(int fd,uint8_t *data,int length)
 {
 	int ret;
 	struct spi_ioc_transfer tr;
-        uint8_t tx[240*340*2]={0,}; 	
+        uint8_t tx[240*320*2]={0,}; 	
 	uint8_t rx[ARRAY_SIZE(tx)] = {0, };
 	uint8_t *txAddr = tx;                    
 
 	memcpy(tx, data, length);
-	
-	for (int i=0;i<(ARRAY_SIZE(tx)/SPITXBUFFERSIZE)-2;i++) 
+	for (int i=0;i<(ARRAY_SIZE(tx)/SPITXBUFFERSIZE);i++) 
 		{
 			tr.tx_buf = (unsigned long)txAddr;
 			tr.rx_buf = (unsigned long)rx;
