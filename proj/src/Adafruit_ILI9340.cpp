@@ -398,7 +398,6 @@ void Adafruit_ILI9340::drawPixel(int16_t x, int16_t y, uint16_t color) {
   if((x < 0) ||(x >= _width) || (y < 0) || (y >= _height)) return;
 
 #ifdef BeagleBoneBlack
-printf(" %d - %d\n ",x,y);
 storePixel(x,y,color);
 #else
 
@@ -425,6 +424,9 @@ void Adafruit_ILI9340::drawFastVLine(int16_t x, int16_t y, int16_t h,
   // Rudimentary clipping
   if((x >= _width) || (y >= _height)) return;
 
+#ifdef BeagleBoneBlack
+  drawLine(x, y, x, y+h-1, color);
+#else
   if((y+h-1) >= _height) 
     h = _height-y;
 
@@ -432,17 +434,20 @@ void Adafruit_ILI9340::drawFastVLine(int16_t x, int16_t y, int16_t h,
 
   uint8_t hi = color >> 8, lo = color;
 
-  SET_BIT(dcport, dcpinmask);
-  //digitalWrite(_dc, HIGH);
-  CLEAR_BIT(csport, cspinmask);
-  //digitalWrite(_cs, LOW);
+  //SET_BIT(dcport, dcpinmask);
+  digitalWrite(_dc, HIGH);
+  //CLEAR_BIT(csport, cspinmask);
+  digitalWrite(_cs, LOW);
 
   while (h--) {
+
     spiwrite(hi);
     spiwrite(lo);
   }
-  SET_BIT(csport, cspinmask);
-  //digitalWrite(_cs, HIGH);
+  //SET_BIT(csport, cspinmask);
+  digitalWrite(_cs, HIGH);
+
+#endif
 }
 
 
@@ -452,19 +457,24 @@ void Adafruit_ILI9340::drawFastHLine(int16_t x, int16_t y, int16_t w,
   // Rudimentary clipping
   if((x >= _width) || (y >= _height)) return;
   if((x+w-1) >= _width)  w = _width-x;
+
+#ifdef BeagleBoneBlack
+  drawLine(x, y, x+w-1, y, color);
+#else
   setAddrWindow(x, y, x+w-1, y);
 
   uint8_t hi = color >> 8, lo = color;
-  SET_BIT(dcport, dcpinmask);
-  CLEAR_BIT(csport, cspinmask);
-  //digitalWrite(_dc, HIGH);
-  //digitalWrite(_cs, LOW);
+  //SET_BIT(dcport, dcpinmask);
+  //CLEAR_BIT(csport, cspinmask);
+  digitalWrite(_dc, HIGH);
+  digitalWrite(_cs, LOW);
   while (w--) {
     spiwrite(hi);
     spiwrite(lo);
   }
-  SET_BIT(csport, cspinmask);
-  //digitalWrite(_cs, HIGH);
+  //SET_BIT(csport, cspinmask);
+  digitalWrite(_cs, HIGH);
+#endif
 }
 
 void Adafruit_ILI9340::clearBuffer(){
@@ -502,17 +512,8 @@ void Adafruit_ILI9340::fillDisplay(int16_t x, int16_t y, int16_t w, int16_t h) {
     for(x=0; x<w; x++) {
        data[i]=dispBuffer[x][y]>>8;
        data[i+1]=dispBuffer[x][y];
-       	if(y<10)
-	{
-	printf("%d ",dispBuffer[x][y]);
-//	getchar();
-	}
 	i+=2;
 	}
-printf("\n");
-
-   	if(y<30)
-getchar();
   }
   digitalWrite(_dc, HIGH);
   digitalWrite(_cs, LOW);
@@ -522,7 +523,15 @@ getchar();
 }
 
 void Adafruit_ILI9340::fillScreen(uint16_t color) {
+
+#ifdef BeagleBoneBlack
+  clearBuffer();
+#endif
   fillRect(0, 0,  _width, _height,color);
+#ifdef BeagleBoneBlack
+  fillBufferScreen();
+#endif
+
 }
 // fill a rectangle
 void Adafruit_ILI9340::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
@@ -534,8 +543,16 @@ void Adafruit_ILI9340::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
   if((x + w - 1) >= _width)  w = _width  - x;
   if((y + h - 1) >= _height) h = _height - y;
 
-  setAddrWindow(x, y, x+w-1, y+h-1);
+#ifdef BeagleBoneBlack
+int i,j;
+  for(j=y; j<y+h-1; j++) {
+    for(i=x; i<x+w-1; i++) {
+	dispBuffer[i][j]=color;	
+}
+}
+#else
 
+  setAddrWindow(x, y, x+w-1, y+h-1);
   uint8_t hi = color >> 8, lo = color;
   int i=0;
 //  SET_BIT(dcport, dcpinmask);
@@ -557,6 +574,7 @@ spiTransferBurst(fd,data,ARRAYSIZE);
   digitalWrite(_cs, HIGH);
 // closeSpi(fd);
   //SET_BIT(csport, cspinmask);
+#endif
 }
 
 // Pass 8-bit (each) R,G,B, get back 16-bit packed color

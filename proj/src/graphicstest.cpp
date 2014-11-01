@@ -48,28 +48,17 @@ else return b;
 
 
 unsigned long testFillScreen() {
-uint16_t r;
-uint8_t i;
- srand(time(NULL));
 //  unsigned long start = micros();
-//while(1)
-{
 
-  tft.setRotation(0);
-  //r = (uint16_t)rand();
-//  tft.fillScreen(r);
-  //delay(500);
-//  tft.fillScreen(ILI9340_BLACK);
-  //delay(500);
+  tft.fillScreen(ILI9340_BLACK);
+  delay(500);
   tft.fillScreen(ILI9340_RED);
-  //delay(500);
+  delay(500);
   tft.fillScreen(ILI9340_GREEN);
-  //delay(500);
+  delay(500);
   tft.fillScreen(ILI9340_BLUE);
-  //delay(500);
-  //tft.fillScreen(ILI9340_BLACK);
-//  getchar();
-};
+  delay(500);
+  tft.fillScreen(ILI9340_BLACK);
   return 0;//micros() - start;
 }
 unsigned long testText() {
@@ -117,15 +106,11 @@ unsigned long testLines(uint16_t color) {
   x1 = y1 = 0;
   y2    = h - 1;
   //start = micros();
-//  for(x2=0; x2<w; x2+=5) {tft.drawLine(x1, y1, x2, y2, color);getchar();
-//  tft.fillBufferScreen();}
-//getchar();
+  for(x2=0; x2<w; x2+=6) {tft.drawLine(x1, y1, x2, y2, color);
+  tft.fillBufferScreen();}
 
-//  tft.fillBufferScreen();
-  tft.clearBuffer();
-  delay(200);
   x2    = w - 1;
- for(y2=0; y2<h; y2+=10) {tft.drawLine(x1, y1, x2, y2, color);getchar();
+ for(y2=0; y2<h; y2+=6) {tft.drawLine(x1, y1, x2, y2, color);
   tft.fillBufferScreen();}
   delay(200);
   //t     = micros() - start; // fillScreen doesn't count against timing
@@ -141,8 +126,6 @@ unsigned long testLines(uint16_t color) {
   for(x2=0; x2<w; x2+=6) {tft.drawLine(x1, y1, x2, y2, color);
 
   tft.fillBufferScreen();}
- // tft.clearBuffer();
-  delay(200);
 
   x2    = 0;
   for(y2=0; y2<h; y2+=6) {tft.drawLine(x1, y1, x2, y2, color);
@@ -162,13 +145,12 @@ unsigned long testLines(uint16_t color) {
   //start = micros();
   for(x2=0; x2<w; x2+=6) {tft.drawLine(x1, y1, x2, y2, color);
   tft.fillBufferScreen();}
-  delay(200);
   x2    = w - 1;
   for(y2=0; y2<h; y2+=6) {tft.drawLine(x1, y1, x2, y2, color);
   
   tft.fillBufferScreen();}
   //t    += micros() - start;
-
+  delay(200);
   tft.fillScreen(ILI9340_BLACK);
 
   tft.clearBuffer();
@@ -182,7 +164,6 @@ unsigned long testLines(uint16_t color) {
   x2    = 0;
   for(y2=0; y2<h; y2+=6) {tft.drawLine(x1, y1, x2, y2, color);
   tft.fillBufferScreen();}
-  delay(200);
   
   return 0;//micros() - start;
 }
@@ -192,10 +173,12 @@ unsigned long testFastLines(uint16_t color1, uint16_t color2) {
   int           x, y, w = tft.width(), h = tft.height();
 
   tft.fillScreen(ILI9340_BLACK);
+  tft.clearBuffer();
   //start = micros();
-  for(y=0; y<h; y+=5) tft.drawFastHLine(0, y, w, color1);
-  for(x=0; x<w; x+=5) tft.drawFastVLine(x, 0, h, color2);
-
+  for(y=0; y<h; y+=5) {tft.drawFastHLine(0, y, w, color1);
+  tft.fillBufferScreen();}
+  for(x=0; x<w; x+=5) {tft.drawFastVLine(x, 0, h, color2);
+  tft.fillBufferScreen();}
   return 0;//micros() - start;
 }
 
@@ -208,9 +191,13 @@ unsigned long testRects(uint16_t color) {
   tft.fillScreen(ILI9340_BLACK);
   n     = min(tft.width(), tft.height());
   //start = micros();
-  for(i=2; i<n; i+=6) {
+  printf("%d - \n",n);
+  tft.clearBuffer();
+
+for(i=2; i<n; i+=6) {
     i2 = i / 2;
     tft.drawRect(cx-i2, cy-i2, i, i, color);
+   tft.fillBufferScreen(); 
   }
 
   return 0;//micros() - start;
@@ -221,9 +208,9 @@ unsigned long testFilledRects(uint16_t color1, uint16_t color2) {
   int           n, i, i2,
                 cx = tft.width()  / 2 - 1,
                 cy = tft.height() / 2 - 1;
-
   tft.fillScreen(ILI9340_BLACK);
   n = min(tft.width(), tft.height());
+  tft.clearBuffer();
   for(i=n; i>0; i-=6) {
     i2    = i / 2;
     //start = micros();
@@ -231,6 +218,7 @@ unsigned long testFilledRects(uint16_t color1, uint16_t color2) {
     //t    += micros() - start;
     // Outlines are not included in timing results
     tft.drawRect(cx-i2, cy-i2, i, i, color2);
+    tft.fillBufferScreen();
   }
 
   return t;
@@ -242,10 +230,13 @@ unsigned long testFilledCircles(uint8_t radius, uint16_t color) {
 
   tft.fillScreen(ILI9340_BLACK);
   //start = micros();
+  tft.clearBuffer();
   for(x=radius; x<w; x+=r2) {
     for(y=radius; y<h; y+=r2) {
       tft.fillCircle(x, y, radius, color);
     }
+
+     tft.fillBufferScreen();
   }
 
   return 0;//micros() - start;
@@ -264,6 +255,7 @@ unsigned long testCircles(uint8_t radius, uint16_t color) {
     for(y=0; y<h; y+=r2) {
       tft.drawCircle(x, y, radius, color);
     }
+	tft.fillBufferScreen();
   }
 
   return 0;//micros() - start;
@@ -277,12 +269,14 @@ unsigned long testTriangles() {
   tft.fillScreen(ILI9340_BLACK);
   n     = min(cx, cy);
 //  start = micros();
+tft.clearBuffer();
   for(i=0; i<n; i+=5) {
     tft.drawTriangle(
       cx    , cy - i, // peak
       cx - i, cy + i, // bottom left
       cx + i, cy + i, // bottom right
       tft.Color565(0, 0, i));
+     tft.fillBufferScreen();
   }
 
   return 0;//micros() - start;
@@ -295,6 +289,7 @@ unsigned long testFilledTriangles() {
 
   tft.fillScreen(ILI9340_BLACK);
 //  start = micros();
+  tft.clearBuffer();
   for(i=min(cx,cy); i>10; i-=5) {
     //start = micros();
     tft.fillTriangle(cx, cy - i, cx - i, cy + i, cx + i, cy + i,
@@ -302,6 +297,7 @@ unsigned long testFilledTriangles() {
   //  t += micros() - start;
     tft.drawTriangle(cx, cy - i, cx - i, cy + i, cx + i, cy + i,
       tft.Color565(i, i, 0));
+	tft.fillBufferScreen();
   }
 
   return t;
@@ -314,11 +310,14 @@ unsigned long testRoundRects() {
                 cy = tft.height() / 2 - 1;
 
   tft.fillScreen(ILI9340_BLACK);
+
+  tft.clearBuffer();
   w     = min(tft.width(), tft.height());
 //  start = micros();
   for(i=0; i<w; i+=6) {
     i2 = i / 2;
     tft.drawRoundRect(cx-i2, cy-i2, i, i, i/8, tft.Color565(i, 0, 0));
+   tft.fillBufferScreen();
   }
 
   return 0;//micros() - start;
@@ -330,11 +329,14 @@ unsigned long testFilledRoundRects() {
                 cx = tft.width()  / 2 - 1,
                 cy = tft.height() / 2 - 1;
 
-  tft.fillScreen(ILI9340_BLACK);
+ tft.fillScreen(ILI9340_BLACK);
 //  start = micros();
+  tft.clearBuffer();
   for(i=min(tft.width(), tft.height()); i>20; i-=6) {
     i2 = i / 2;
     tft.fillRoundRect(cx-i2, cy-i2, i, i, i/8, tft.Color565(0, i, 0));
+ tft.fillBufferScreen();  
+    getchar();
   }
 
   return 0;//micros() - start;
@@ -344,64 +346,51 @@ int main() {
   
   printf("Adafruit 2.2\" SPI TFT Test!"); 
   tft.begin();
+
 //  tft.invertDisplay(1); 
   printf("Benchmark                Time (microseconds)");
   printf("Screen fill              ");
   (testFillScreen());
  // delay(500);
-//  getchar();
   printf("Text                     ");
  // (testText());
 //  delay(3000);
 //  getchar();
   printf("Lines                    ");
-  (testLines(ILI9340_CYAN));
+  (testLines(ILI9340_GREEN));
   delay(500);
 
 //  getchar();
   printf("Horiz/Vert Lines         ");
   (testFastLines(ILI9340_RED, ILI9340_BLUE));
   delay(500);
-  getchar();
+//  getchar();
 
   printf("Rectangles (outline)     ");
   (testRects(ILI9340_GREEN));
   delay(500);
-  getchar();
 
   printf("Rectangles (filled)      ");
   (testFilledRects(ILI9340_YELLOW, ILI9340_MAGENTA));
   delay(500);
   getchar();
-
   printf("Circles (filled)         ");
   (testFilledCircles(10, ILI9340_MAGENTA));
-  getchar();
 
   printf("Circles (outline)        ");
   (testCircles(10, ILI9340_WHITE));
-  getchar();
-  delay(500);
 
   printf("Triangles (outline)      ");
   (testTriangles());
-  delay(500);
-  getchar();
 
   printf("Triangles (filled)       ");
   (testFilledTriangles());
-  delay(500);
-  getchar();
-
-  printf("Rounded rects (outline)  ");
+  
+printf("Rounded rects (outline)  ");
   (testRoundRects());
-  delay(500);
-  getchar();
-
-  printf("Rounded rects (filled)   ");
+  
+printf("Rounded rects (filled)   ");
   (testFilledRoundRects());
-  delay(500);
-  getchar();
 
   printf("Done!");
 return 0;
