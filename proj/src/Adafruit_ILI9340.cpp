@@ -544,11 +544,12 @@ void Adafruit_ILI9340::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
   if((y + h - 1) >= _height) h = _height - y;
 
 #ifdef BeagleBoneBlack
-int i,j;
-  for(j=y; j<y+h-1; j++) {
-    for(i=x; i<x+w-1; i++) {
+uint16_t i,j;
+  for(j=y; j<(y+h-1); j++) 
+    for(i=x; i<(x+w-1); i++) 
+{
+//	printf("x - y- i- j- %d - %d - %d - %d\n", x, y, i, j);
 	dispBuffer[i][j]=color;	
-}
 }
 #else
 

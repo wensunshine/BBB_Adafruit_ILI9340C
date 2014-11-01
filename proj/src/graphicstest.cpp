@@ -208,13 +208,14 @@ unsigned long testFilledRects(uint16_t color1, uint16_t color2) {
   int           n, i, i2,
                 cx = tft.width()  / 2 - 1,
                 cy = tft.height() / 2 - 1;
-  tft.fillScreen(ILI9340_BLACK);
+//  tft.fillScreen(ILI9340_BLACK);
   n = min(tft.width(), tft.height());
   tft.clearBuffer();
   for(i=n; i>0; i-=6) {
     i2    = i / 2;
     //start = micros();
     tft.fillRect(cx-i2, cy-i2, i, i, color1);
+
     //t    += micros() - start;
     // Outlines are not included in timing results
     tft.drawRect(cx-i2, cy-i2, i, i, color2);
@@ -336,7 +337,6 @@ unsigned long testFilledRoundRects() {
     i2 = i / 2;
     tft.fillRoundRect(cx-i2, cy-i2, i, i, i/8, tft.Color565(0, i, 0));
  tft.fillBufferScreen();  
-    getchar();
   }
 
   return 0;//micros() - start;
@@ -371,12 +371,10 @@ int main() {
   delay(500);
 
   printf("Rectangles (filled)      ");
-  (testFilledRects(ILI9340_YELLOW, ILI9340_MAGENTA));
+ (testFilledRects(ILI9340_YELLOW, ILI9340_MAGENTA));
   delay(500);
-  getchar();
   printf("Circles (filled)         ");
   (testFilledCircles(10, ILI9340_MAGENTA));
-
   printf("Circles (outline)        ");
   (testCircles(10, ILI9340_WHITE));
 
@@ -393,5 +391,6 @@ printf("Rounded rects (filled)   ");
   (testFilledRoundRects());
 
   printf("Done!");
+getchar();
 return 0;
 }
